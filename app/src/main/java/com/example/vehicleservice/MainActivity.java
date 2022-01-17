@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void readVehicleModel() {
-
         try {
             int ch;
             StringBuilder builder = new StringBuilder();
@@ -43,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
                 builder.append((char)ch);
             }
             Toast.makeText(getApplicationContext(), ""+builder, Toast.LENGTH_LONG).show();
+            vehicleModel = ""+builder;
         }
         catch (FileNotFoundException e) {
             // TODO: handle exception
