@@ -21,6 +21,7 @@ import java.io.InputStreamReader;
 public class MainActivity extends AppCompatActivity {
 
     private String vehicleModel;
+    DBHelper myDB;
 
 
     @Override
@@ -28,9 +29,32 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        myDB = new DBHelper(this);
+
         readVehicleModel();
         //readModel();
+
+        Boolean tableCheck = myDB.isTableEmpty();
+        if (tableCheck == true){
+
+            if (vehicleModel.equals("M1")) {
+                myDB.insertSettings("Touch Screen Beep",2);
+                myDB.insertSettings("Fuel Saver Display in Cluster",0);
+                myDB.insertSettings("Display Mode Manual",0);
+                Toast.makeText(getApplicationContext(), ""+vehicleModel, Toast.LENGTH_LONG).show();
+            }
+            else {
+                myDB.insertSettings("Touch Screen Beep",1);
+                myDB.insertSettings("Display Mode Manual",0);
+                Toast.makeText(this, "M2", Toast.LENGTH_LONG).show();
+            }
+        }
+        else {
+            Toast.makeText(this, "Not empty", Toast.LENGTH_SHORT).show();
+        }
+
     }
+
 
     private void readVehicleModel() {
         try {
@@ -40,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
             while((ch = fileInputStream.read()) != -1) {
                 builder.append((char)ch);
             }
-            Toast.makeText(getApplicationContext(), ""+builder, Toast.LENGTH_LONG).show();
             vehicleModel = ""+builder;
         }
         catch (FileNotFoundException e) {
@@ -64,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Toast.makeText(MainActivity.this, ""+string, Toast.LENGTH_LONG).show();
+        vehicleModel = string;
     }*/
 
 
