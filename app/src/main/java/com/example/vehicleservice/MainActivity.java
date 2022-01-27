@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
         insertSettings();
 
+
     }
 
 
@@ -47,10 +48,18 @@ public class MainActivity extends AppCompatActivity {
                 byte[] buffer = new byte[size];
                 inputStream.read(buffer);
                 string = new String(buffer);
+
+                vehicleModel = string;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Toast.makeText(MainActivity.this, ""+vehicleModel, Toast.LENGTH_LONG).show();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
             Toast.makeText(MainActivity.this, ""+string, Toast.LENGTH_LONG).show();
+
 
         }
 

@@ -20,6 +20,7 @@ public class VehicleService extends Service {
 
     DBHelper myDB;
     ArrayList<String> menu_id,menu_name,menu_value;
+
     int display,val;
 
     public VehicleService() {

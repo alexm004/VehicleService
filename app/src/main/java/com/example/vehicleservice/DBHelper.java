@@ -18,6 +18,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String COLUMN_MENU = "menu";
     private static final String COLUMN_VALUE = "value";
 
+
     private static final String TABLE_NAME1 = "Settings";
     private static String CREATE_TABLE1 = "CREATE TABLE IF NOT EXISTS "+ TABLE_NAME1 + "(id text PRIMARY KEY , menu text , value text)";
 
