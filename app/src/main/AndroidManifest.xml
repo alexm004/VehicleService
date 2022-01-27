@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.VehicleService">
         <service
-            android:name=".VehicleService"
+            android:name=".VehicleService" android:process=":remote"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
