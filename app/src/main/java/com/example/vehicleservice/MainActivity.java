@@ -40,24 +40,20 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void readVehicleModel() {
-        try {
-            int ch;
-            StringBuilder builder = new StringBuilder();
-            FileInputStream fileInputStream = openFileInput("Vehicle_MODEL.txt");
-            while((ch = fileInputStream.read()) != -1) {
-                builder.append((char)ch);
+            String string = "";
+            try {
+                InputStream inputStream = getAssets().open("Vehicle_MODEL.txt");
+                int size = inputStream.available();
+                byte[] buffer = new byte[size];
+                inputStream.read(buffer);
+                string = new String(buffer);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            vehicleModel = ""+builder;
+            Toast.makeText(MainActivity.this, ""+string, Toast.LENGTH_LONG).show();
+
         }
-        catch (FileNotFoundException e) {
-            // TODO: handle exception
-            e.printStackTrace();
-        }
-        catch (IOException e) {
-            // TODO: handle exception
-            e.printStackTrace();
-        }
-    }
+
 
 
     private void insertSettings() {
