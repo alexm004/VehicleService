@@ -10,6 +10,8 @@ import android.os.Looper;
 import android.os.RemoteException;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -22,6 +24,7 @@ public class VehicleService extends Service {
     ArrayList<String> menu_id,menu_name,menu_value;
 
     int display,val;
+    String vehicleModel;
 
     public VehicleService() {
 
@@ -42,16 +45,16 @@ public class VehicleService extends Service {
     aidlInterface.Stub stubObject = new aidlInterface.Stub() {
 
         @Override
-        public int calc(int n1, int n2) throws RemoteException {
-            //Toast.makeText(getApplicationContext(),""+n2,Toast.LENGTH_LONG).show();
-            return n1+n2;
-        }
-
-        @Override
         public int menuClick(String id, int value) throws RemoteException {
             return displaymode(id,value);
         }
+
+        @Override
+        public String vehicleModel() throws RemoteException {
+            return readVehicleModel();
+        }
     };
+
 
     public int displaymode(String id,int value){
         if (id.equals("display") && value ==1){
@@ -75,10 +78,26 @@ public class VehicleService extends Service {
         }
 
 
+    private String readVehicleModel() {
+        String string = "";
+        try {
+            InputStream inputStream = getAssets().open("Vehicle_MODEL.txt");
+            int size = inputStream.available();
+            byte[] buffer = new byte[size];
+            inputStream.read(buffer);
+            string = new String(buffer);
+            vehicleModel = string;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return vehicleModel;
+    }
+
+
     public void storeDataInArrays(){
         Cursor cursor = myDB.getData();
         if (cursor.getCount()== 0){
-            Toast.makeText(this,"No data/home/quest/Training Project/VehicleHMI2",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"No data",Toast.LENGTH_LONG).show();
         }
         else {
             while (cursor.moveToNext()){

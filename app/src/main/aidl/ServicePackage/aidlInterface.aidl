@@ -6,8 +6,8 @@ package ServicePackage;
 interface aidlInterface {
 
 
-    int calc(int n1,int n2);
-
     int menuClick(String id ,int value);
+
+    String vehicleModel();
 
 }
