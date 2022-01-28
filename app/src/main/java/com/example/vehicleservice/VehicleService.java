@@ -79,7 +79,7 @@ public class VehicleService extends Service {
     public void storeDataInArrays(){
         Cursor cursor = myDB.getData();
         if (cursor.getCount()== 0){
-            Toast.makeText(this,"No data",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"No data/home/quest/Training Project/VehicleHMI2",Toast.LENGTH_LONG).show();
         }
         else {
             while (cursor.moveToNext()){

@@ -60,8 +60,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void insertSettings() {
 
-        Boolean tableCheck = myDB.isTableEmpty();
-        if (tableCheck == true){
+        boolean tableCheck = myDB.isTableEmpty();
+        if (tableCheck){
 
             if (vehicleModel.equals("M1")) {
                 myDB.insertSettings("touch","Touch Screen Beep",2);
