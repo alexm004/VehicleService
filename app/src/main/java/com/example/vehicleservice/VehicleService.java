@@ -53,7 +53,6 @@ public class VehicleService extends Service {
         }
     };
 
-
     public int displaymode(String id,int value){
         if (id.equals("display") && value ==1){
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
