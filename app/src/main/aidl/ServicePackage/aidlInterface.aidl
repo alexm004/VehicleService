@@ -10,4 +10,6 @@ interface aidlInterface {
 
     String vehicleModel();
 
+    void updateValues(String id, int value);
+
 }

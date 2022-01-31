@@ -10,6 +10,8 @@ import android.os.Looper;
 import android.os.RemoteException;
 import android.widget.Toast;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -53,16 +55,22 @@ public class VehicleService extends Service {
         public String vehicleModel() throws RemoteException {
             return readVehicleModel();
         }
+
+        @Override
+        public void updateValues(String id, int value) throws RemoteException {
+           updateValue(id,value);
+        }
     };
 
 
     public int displaymode(String id,int value){
-        if (id.equals("display") && value ==1){
+        updateValue(id,value);
+        if (id.equals("Display Mode Manual") && value ==1){
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     Random random = new Random();
-                    val = random.nextInt(20+10)-10;
+                    val = random.nextInt(20+2)-2;
                     if (val>0 && val%2==0){
                         display = 1;
                     }else if (val>0 && val%2!=0){
@@ -72,21 +80,26 @@ public class VehicleService extends Service {
                     }
                 }
             },5000);
-            return display;
+
         }
-        else return -1;
+        else if (id.equals("Display Mode Manual") && value ==0){
+            updateValue(id,value);
+            display = -1;
         }
+        return display;
+    }
 
 
     private String readVehicleModel() {
-        String string = "";
+
         try {
-            InputStream inputStream = getAssets().open("Vehicle_MODEL.txt");
-            int size = inputStream.available();
-            byte[] buffer = new byte[size];
-            inputStream.read(buffer);
-            string = new String(buffer);
-            vehicleModel = string;
+            int ch;
+            StringBuilder stringBuilder = new StringBuilder();
+            FileInputStream fileInputStream = openFileInput("Vehicle_MODEL.txt");
+            while ((ch = fileInputStream.read()) != -1) {
+                stringBuilder.append((char) ch);
+                vehicleModel = "" + stringBuilder.toString();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -94,7 +107,12 @@ public class VehicleService extends Service {
     }
 
 
-    public void storeDataInArrays(){
+    public void updateValue(String id, int value){
+        myDB.updateData(id,value);
+    }
+
+
+        public void storeDataInArrays(){
         Cursor cursor = myDB.getData();
         if (cursor.getCount()== 0){
             Toast.makeText(this,"No data",Toast.LENGTH_LONG).show();

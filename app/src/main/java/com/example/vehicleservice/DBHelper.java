@@ -24,7 +24,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
 
-    public DBHelper(Context context) {
+     DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -45,7 +45,7 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertSettings(String id , String menu,Integer value){
+    public boolean insertSettings(String id , String menu, Integer value){
       SQLiteDatabase myDB = this.getWritableDatabase();
       ContentValues cv = new ContentValues();
       cv.put(COLUMN_ID,id);
@@ -74,6 +74,13 @@ public class DBHelper extends SQLiteOpenHelper {
             cursor = myDB.rawQuery(query,null);
         }
         return cursor;
+    }
+
+    public void updateData(String id, int value){
+        SQLiteDatabase myDB = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_VALUE,value);
+        myDB.update(TABLE_NAME1,cv,"menu=?",new String[]{id});
     }
 
 }
