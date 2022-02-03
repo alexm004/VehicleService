@@ -12,4 +12,8 @@ interface aidlInterface {
 
     void updateValues(String id, int value);
 
+    void updateControl(String column, int value);
+
+    int getTarget();
+
 }

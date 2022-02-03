@@ -3,7 +3,6 @@ package com.example.vehicleservice;
 import android.app.Service;
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -11,12 +10,9 @@ import android.os.RemoteException;
 import android.widget.Toast;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 import ServicePackage.aidlInterface;
 
@@ -25,7 +21,7 @@ public class VehicleService extends Service {
     DBHelper myDB;
     ArrayList<String> menu_id,menu_name,menu_value;
 
-    int display,val;
+    int display,val,target;
     String vehicleModel;
 
     public VehicleService() {
@@ -59,6 +55,17 @@ public class VehicleService extends Service {
         @Override
         public void updateValues(String id, int value) throws RemoteException {
            updateValue(id,value);
+        }
+
+        @Override
+        public void updateControl(String column, int value) throws RemoteException {
+            updateControlValue(column,value);
+
+        }
+
+        @Override
+        public int getTarget() throws RemoteException {
+            return targetValue();
         }
     };
 
@@ -95,10 +102,10 @@ public class VehicleService extends Service {
         try {
             int ch;
             StringBuilder stringBuilder = new StringBuilder();
-            FileInputStream fileInputStream = openFileInput("Vehicle_MODEL.txt");
+            FileInputStream fileInputStream = openFileInput("Vehicle_MODEL2.txt");
             while ((ch = fileInputStream.read()) != -1) {
                 stringBuilder.append((char) ch);
-                vehicleModel = "" + stringBuilder.toString();
+                vehicleModel = "" + stringBuilder;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -108,7 +115,24 @@ public class VehicleService extends Service {
 
 
     public void updateValue(String id, int value){
-        myDB.updateData(id,value);
+        myDB.updateSettings(id,value);
+    }
+
+    public void updateControlValue(String column, int value){
+        myDB.updateControl(column,value);
+    }
+
+    public int targetValue(){
+        Cursor cursor = myDB.getTarget();
+        if (cursor.getCount()== 0){
+            Toast.makeText(this,"No data",Toast.LENGTH_LONG).show();
+        }
+        else {
+            while (cursor.moveToNext()){
+               target = Integer.parseInt(cursor.getString(2));
+            }
+        }
+        return target;
     }
 
 
