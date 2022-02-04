@@ -19,7 +19,6 @@ import ServicePackage.aidlInterface;
 public class VehicleService extends Service {
 
     DBHelper myDB;
-    ArrayList<String> menu_id,menu_name,menu_value;
 
     int display,val,target;
     String vehicleModel;
@@ -28,9 +27,6 @@ public class VehicleService extends Service {
 
         myDB = new DBHelper(this);
 
-        menu_id = new ArrayList<>();
-        menu_name = new ArrayList<>();
-        menu_value = new ArrayList<>();
     }
 
 
@@ -135,21 +131,6 @@ public class VehicleService extends Service {
         return target;
     }
 
-
-        public void storeDataInArrays(){
-        Cursor cursor = myDB.getData();
-        if (cursor.getCount()== 0){
-            Toast.makeText(this,"No data",Toast.LENGTH_LONG).show();
-        }
-        else {
-            while (cursor.moveToNext()){
-                menu_id.add(cursor.getString(0));
-                menu_name.add(cursor.getString(1));
-                menu_value.add(cursor.getString(2));
-
-            }
-        }
-    }
 
        
 }

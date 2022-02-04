@@ -2,10 +2,16 @@ package com.example.vehicleservice;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -13,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String vehicleModel;
     DBHelper myDB;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
             }
             Toast.makeText(MainActivity.this, ""+vehicleModel, Toast.LENGTH_LONG).show();
 
+             insertSettings();
         }
      */
 
@@ -48,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             int ch;
             StringBuilder stringBuilder = new StringBuilder();
-            FileInputStream fileInputStream = openFileInput("Vehicle_MODEL.txt");
+            FileInputStream fileInputStream = openFileInput("Vehicle_MODEL2.txt");
             while ((ch = fileInputStream.read()) != -1) {
                 stringBuilder.append((char) ch);
                 vehicleModel = "" + stringBuilder;
