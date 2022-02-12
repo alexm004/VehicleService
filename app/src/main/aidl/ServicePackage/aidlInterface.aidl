@@ -16,4 +16,6 @@ interface aidlInterface {
 
     int getTarget();
 
+    int getValue(String menu);
+
 }

@@ -125,5 +125,15 @@ public class DBHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    Cursor getValue(String menu){
+
+        SQLiteDatabase myDB = this.getReadableDatabase();
+        Cursor cursor = null;
+        if (myDB != null){
+            cursor = myDB.rawQuery("SELECT " + COLUMN_VALUE + " FROM " + TABLE_NAME1 +" WHERE menu = ?",new String[]{menu});
+        }
+        return cursor;
+    }
+
 
 }

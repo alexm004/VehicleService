@@ -1,3 +1,8 @@
+/**
+ * author@ Alex_M_Paul
+ * file - Service app MainActivity
+ */
+
 package com.example.vehicleservice;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,16 +14,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
 
     private String vehicleModel;
     DBHelper myDB;
+
+    EditText etInput;
+    Button btnUpdate;
 
 
     @Override
@@ -26,10 +33,65 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        etInput = findViewById(R.id.et_input);
+        btnUpdate = findViewById(R.id.btn_save);
+
         myDB = new DBHelper(this);
 
-        readVehicleModel();
+//  file named Vehicle_MODEL.txt is checked if it exists in internal storage
 
+        File file = getBaseContext().getFileStreamPath("Vehicle_MODEL.txt");
+
+//  if file exist readVehicleModel() is called to read vehicle model name from it
+//  user can also update the value in the file to M1 or M2 based on their need
+
+        if (file.exists()){
+
+            readVehicleModel();
+
+            btnUpdate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    file.delete();
+
+                    try {
+                        FileOutputStream fileOutputStream = openFileOutput("Vehicle_MODEL.txt", Context.MODE_PRIVATE);
+                        //String data = input the data
+                        fileOutputStream.write(etInput.getText().toString().getBytes());
+                        fileOutputStream.flush();
+                        fileOutputStream.close();
+                        Toast.makeText(MainActivity.this, "File Saved", Toast.LENGTH_LONG).show();
+
+                    } catch(IOException e){
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+        }
+
+//  or else user can create file with content 'M1' or 'M2' and will be stored in internal storage on clicking button
+        else {
+
+            btnUpdate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    try {
+                        FileOutputStream fileOutputStream = openFileOutput("Vehicle_MODEL.txt", Context.MODE_PRIVATE);
+                        //String data = input the data
+                        fileOutputStream.write(etInput.getText().toString().getBytes());
+                        fileOutputStream.flush();
+                        fileOutputStream.close();
+                        Toast.makeText(MainActivity.this, "File Saved", Toast.LENGTH_LONG).show();
+
+                    } catch(IOException e){
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+        }
     }
 
 
@@ -51,12 +113,14 @@ public class MainActivity extends AppCompatActivity {
         }
      */
 
+//  This function is used to read the model name from the file
+
     private void readVehicleModel() {
 
         try {
             int ch;
             StringBuilder stringBuilder = new StringBuilder();
-            FileInputStream fileInputStream = openFileInput("Vehicle_MODEL2.txt");
+            FileInputStream fileInputStream = openFileInput("Vehicle_MODEL.txt");
             while ((ch = fileInputStream.read()) != -1) {
                 stringBuilder.append((char) ch);
                 vehicleModel = "" + stringBuilder;
@@ -69,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         insertSettings();
     }
 
-
+//  This function is used to insert to the database all the required values based on the vehicle model
 
     private void insertSettings() {
 
@@ -88,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
             }
             else {
                 myDB.insertSettings("touch","Touch Screen Beep",1);
+                myDB.insertSettings("fuel","Fuel Saver Display in Cluster",0);
                 myDB.insertSettings("display","Display Mode Manual",0);
                 myDB.insertSettings("hl on","Display Brightness HL ON",5);
                 myDB.insertSettings("hl off","Display Brightness HL OFF",5);
