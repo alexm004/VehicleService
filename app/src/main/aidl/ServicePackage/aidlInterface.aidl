@@ -18,4 +18,8 @@ interface aidlInterface {
 
     int getValue(String menu);
 
+    int getDisplay();
+
+    void updateDisplay(int value);
+
 }

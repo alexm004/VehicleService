@@ -141,21 +141,21 @@ public class MainActivity extends AppCompatActivity {
         if (tableCheck){
 
             if (vehicleModel.equals("M1")) {
-                myDB.insertSettings("touch","Touch Screen Beep",2);
-                myDB.insertSettings("fuel","Fuel Saver Display in Cluster",0);
-                myDB.insertSettings("display","Display Mode Manual",0);
-                myDB.insertSettings("hl on","Display Brightness HL ON",3);
-                myDB.insertSettings("hl off","Display Brightness HL OFF",3);
+                myDB.insertSettings("touch","Touch Screen Beep",2,0);
+                myDB.insertSettings("fuel","Fuel Saver Display in Cluster",0,0);
+                myDB.insertSettings("display","Display Mode Manual",0,0);
+                myDB.insertSettings("hl on","Display Brightness HL ON",3,0);
+                myDB.insertSettings("hl off","Display Brightness HL OFF",3,0);
 
                 myDB.insertControl("control",1,50);
                // Toast.makeText(getApplicationContext(), ""+vehicleModel, Toast.LENGTH_LONG).show();
             }
             else {
-                myDB.insertSettings("touch","Touch Screen Beep",1);
-                myDB.insertSettings("fuel","Fuel Saver Display in Cluster",0);
-                myDB.insertSettings("display","Display Mode Manual",0);
-                myDB.insertSettings("hl on","Display Brightness HL ON",5);
-                myDB.insertSettings("hl off","Display Brightness HL OFF",5);
+                myDB.insertSettings("touch","Touch Screen Beep",1,0);
+                myDB.insertSettings("fuel","Fuel Saver Display in Cluster",0,0);
+                myDB.insertSettings("display","Display Mode Manual",0,0);
+                myDB.insertSettings("hl on","Display Brightness HL ON",5,0);
+                myDB.insertSettings("hl off","Display Brightness HL OFF",5,0);
 
                 myDB.insertControl("control",1,50);
                 Toast.makeText(this, "M2", Toast.LENGTH_LONG).show();

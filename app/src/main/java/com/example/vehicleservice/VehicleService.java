@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Random;
 
 import ServicePackage.aidlInterface;
@@ -25,7 +24,7 @@ public class VehicleService extends Service {
 
     DBHelper myDB;
 
-    int display,val,target,value;
+    int display,val,target,value,displayVal;
     String vehicleModel;
 
     public VehicleService() {
@@ -88,6 +87,16 @@ public class VehicleService extends Service {
         public int getValue(String menu) throws RemoteException {
             return menuValue(menu);
         }
+
+        @Override
+        public int getDisplay() throws RemoteException {
+            return getDisplayValue();
+        }
+
+        @Override
+        public void updateDisplay(int value) throws RemoteException {
+            updateDisplayVal(value);
+        }
     };
 
 
@@ -98,7 +107,7 @@ public class VehicleService extends Service {
 //  variable is then returned to HMI for enabling or disabling the HlOn and HlOff menu in settings
 
     public int displaymode(String id,int value){
-        updateValue(id,value);
+
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -113,7 +122,6 @@ public class VehicleService extends Service {
                     }
                     else if (id.equals("Display Mode Manual") && value ==0){
                         updateValue(id,value);
-                        display = -1;
                     }
                 }
             },5000);
@@ -149,6 +157,10 @@ public class VehicleService extends Service {
         myDB.updateSettings(id,value);
     }
 
+    public void updateDisplayVal(int value){
+        myDB.updateDisplay(value);
+    }
+
 
 //  this function is used to update the values like target value & pressure unit of control in database when they are clicked
 //  its called in aidl function updateControl()
@@ -162,13 +174,14 @@ public class VehicleService extends Service {
 //  its called in aidl function getTarget()
 
     public int targetValue(){
-        Cursor cursor = myDB.getTarget();
+        Cursor cursor = myDB.getControlValue();
+        int index = 2;
         if (cursor.getCount()== 0){
             Toast.makeText(this,"No data",Toast.LENGTH_LONG).show();
         }
         else {
             while (cursor.moveToNext()){
-               target = Integer.parseInt(cursor.getString(2));
+               target = Integer.parseInt(cursor.getString(index));
             }
         }
         return target;
@@ -191,6 +204,19 @@ public class VehicleService extends Service {
         return value;
     }
 
+    public int getDisplayValue(){
+        Cursor cursor = myDB.getDisplay();
+        int index = 3;
+        if (cursor.getCount()== 0){
+            Toast.makeText(this,"No data",Toast.LENGTH_LONG).show();
+        }
+        else {
+            while (cursor.moveToNext()){
+               displayVal  = Integer.parseInt(cursor.getString(index));
+            }
+        }
+        return displayVal;
+    }
 
        
 }
