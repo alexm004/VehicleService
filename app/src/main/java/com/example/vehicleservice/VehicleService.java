@@ -88,11 +88,15 @@ public class VehicleService extends Service {
             return menuValue(menu);
         }
 
+//  getDisplay() is used to return the displayReturn value from database
+//  this value is the return value from service based on the random number generated in displayMode() function
+
         @Override
         public int getDisplay() throws RemoteException {
             return getDisplayValue();
         }
 
+//  updateDisplay() is used to update the displayReturn value in database from HMI
         @Override
         public void updateDisplay(int value) throws RemoteException {
             updateDisplayVal(value);
@@ -157,6 +161,9 @@ public class VehicleService extends Service {
         myDB.updateSettings(id,value);
     }
 
+//  This function is used to update the return value of 'display mode manual' menu in database
+//  its called in aidl function updateDisplay()
+
     public void updateDisplayVal(int value){
         myDB.updateDisplay(value);
     }
@@ -203,6 +210,10 @@ public class VehicleService extends Service {
         }
         return value;
     }
+
+//  This function return the value from column display in settings table
+//  this value is the return value after generating random number in displayMode() function
+//  its called in aidl function getDisplay()
 
     public int getDisplayValue(){
         Cursor cursor = myDB.getDisplay();
