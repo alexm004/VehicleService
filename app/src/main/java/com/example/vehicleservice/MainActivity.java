@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.vehicleservice.Data.DBHelper;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -38,12 +40,12 @@ public class MainActivity extends AppCompatActivity {
 
         myDB = new DBHelper(this);
 
-//  file named Vehicle_MODEL.txt is checked if it exists in internal storage
+
+/**
+ * @brief Method to check existence of file , if not new file cam be created
+ */
 
         File file = getBaseContext().getFileStreamPath("Vehicle_MODEL.txt");
-
-//  if file exist readVehicleModel() is called to read vehicle model name from it
-//  user can also update the value in the file to M1 or M2 based on their need
 
         if (file.exists()){
 
@@ -70,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-//  or else user can create file with content 'M1' or 'M2' and will be stored in internal storage on clicking button
         else {
 
             btnUpdate.setOnClickListener(new View.OnClickListener() {
@@ -94,26 +95,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    /*private void readVehicleModel() {
-            String string;
-            try {
-                InputStream inputStream = getAssets().open("Vehicle_MODEL.txt");
-                int size = inputStream.available();
-                byte[] buffer = new byte[size];
-                inputStream.read(buffer);
-                string = new String(buffer);
-                vehicleModel = string;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Toast.makeText(MainActivity.this, ""+vehicleModel, Toast.LENGTH_LONG).show();
-
-             insertSettings();
-        }
-     */
-
-//  This function is used to read the model name from the file
+/**
+ * @brief Method to read the model name from the file
+ */
 
     private void readVehicleModel() {
 
@@ -133,7 +117,9 @@ public class MainActivity extends AppCompatActivity {
         insertSettings();
     }
 
-//  This function is used to insert to the database all the required values based on the vehicle model
+/**
+ * @brief Method used to insert data into database based on model
+ */
 
     private void insertSettings() {
 

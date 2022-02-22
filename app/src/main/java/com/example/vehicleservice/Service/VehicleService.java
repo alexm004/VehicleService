@@ -3,7 +3,7 @@
  * file - Service app VehicleService
  */
 
-package com.example.vehicleservice;
+package com.example.vehicleservice.Service;
 
 import android.app.Service;
 import android.content.Intent;
@@ -13,6 +13,8 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.RemoteException;
 import android.widget.Toast;
+
+import com.example.vehicleservice.Data.DBHelper;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -39,34 +41,26 @@ public class VehicleService extends Service {
         return stubObject;
     }
 
-
     aidlInterface.Stub stubObject = new aidlInterface.Stub() {
 
-//  below functions are AIDL functions used for connecting HMI and service
-//  all these functions call separate functions for working
-
-//  menuClick() is works when 'display mode manual' menu is clicked
+     /**
+     * @brief  implementation of AIDL functions
+     */
 
         @Override
         public int menuClick(String id, int value) throws RemoteException {
-            return displaymode(id,value);
+            return displayMode(id,value);
         }
-
-//  vehicleModel() is used to return the vehicle model to HMI after reading it from file in internal storage
 
         @Override
         public String vehicleModel() throws RemoteException {
             return readVehicleModel();
         }
 
-//  updateValues() is used to update the values of settings menu in database when they are clicked
-
         @Override
         public void updateValues(String id, int value) throws RemoteException {
            updateValue(id,value);
         }
-
-//  updateControl() is used to update the values like target value & pressure unit of control in database when they are clicked
 
         @Override
         public void updateControl(String column, int value) throws RemoteException {
@@ -74,29 +68,21 @@ public class VehicleService extends Service {
 
         }
 
-//  getTarget() is used to return the target value from database to control fragment in HMI
-
         @Override
         public int getTarget() throws RemoteException {
             return targetValue();
         }
-
-//  getValue() is used to return values of settings menu from database to HMI
 
         @Override
         public int getValue(String menu) throws RemoteException {
             return menuValue(menu);
         }
 
-//  getDisplay() is used to return the displayReturn value from database
-//  this value is the return value from service based on the random number generated in displayMode() function
-
         @Override
         public int getDisplay() throws RemoteException {
             return getDisplayValue();
         }
 
-//  updateDisplay() is used to update the displayReturn value in database from HMI
         @Override
         public void updateDisplay(int value) throws RemoteException {
             updateDisplayVal(value);
@@ -104,13 +90,16 @@ public class VehicleService extends Service {
     };
 
 
-//  Below are separate FUNCTIONS used by aidl Functions
 
-//  This function is used to generate a random number when display mode manual menu is clicked in settings HMI
-//  based on the random number variable 'display' is initialized with -1/0/1
-//  variable is then returned to HMI for enabling or disabling the HlOn and HlOff menu in settings
 
-    public int displaymode(String id,int value){
+    /**
+     * @param id : menu name
+     * @param value : value of menu to be stored
+     * @return int : value based on the random number
+     * @brief Method used to generate random number and then return a int value based on the random number
+     */
+
+    public int displayMode(String id, int value){
 
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
@@ -134,8 +123,10 @@ public class VehicleService extends Service {
     }
 
 
-//  This function reads the model name from file in internal storage of the device
-//  it is then returned to HMI when called
+    /**
+     * @return string : vehicle model name
+     * @brief Method used to read the vehicle model and return the same to HMI
+     */
 
     private String readVehicleModel() {
 
@@ -154,31 +145,43 @@ public class VehicleService extends Service {
     }
 
 
-//  This function is used to update the default values of settings menu in database
-//  its called in aidl function updateValues()
+    /**
+     * @param id : Menu name
+     * @param value : default value of menu to be stored in database
+     * @brief Method used to update the default value of respective menu when its clicked
+     */
 
     public void updateValue(String id, int value){
         myDB.updateSettings(id,value);
     }
 
-//  This function is used to update the return value of 'display mode manual' menu in database
-//  its called in aidl function updateDisplay()
+
+    /**
+     * @param value : return value from displayMode()
+     * @brief Method used to store the return value in database
+     * @brief its done to maintain the previous state of HlOn and HlOff menu when app is restarted
+     */
 
     public void updateDisplayVal(int value){
         myDB.updateDisplay(value);
     }
 
 
-//  this function is used to update the values like target value & pressure unit of control in database when they are clicked
-//  its called in aidl function updateControl()
+    /**
+     * @param column : column name in database
+     * @param value : value to be stored
+     * @brief Method used to update the values like target value & pressure unit of control in database
+     */
 
     public void updateControlValue(String column, int value){
         myDB.updateControl(column,value);
     }
 
 
-//  This function is used to get the target value from database to show in control fragment in HMI
-//  its called in aidl function getTarget()
+    /**
+     * @return int : current target value from database
+     * @brief Method used to get the target value from database to show in keypad in HMI
+     */
 
     public int targetValue(){
         Cursor cursor = myDB.getControlValue();
@@ -195,8 +198,13 @@ public class VehicleService extends Service {
     }
 
 
-//  This function is used to get the default value of settings menu from database to show in settings fragment in HMI
-//  its called in aidl function getValue()
+    /**
+     *
+     * @param menu : menu name
+     * @return int : default values of menu
+     * @brief Method used to get the default value of settings menu from database,
+     * @brief values are used to maintain previous state of each menu when app is started
+     */
 
     public int menuValue(String menu){
         Cursor cursor = myDB.getValue(menu);
@@ -211,9 +219,12 @@ public class VehicleService extends Service {
         return value;
     }
 
-//  This function return the value from column display in settings table
-//  this value is the return value after generating random number in displayMode() function
-//  its called in aidl function getDisplay()
+
+    /**
+     * @return int : value from database
+     * @brief Method is used to return the value from column display in settings table from database
+     * @brief This value is used to maintain prev state of HlOn and HlOff menu when app is started
+     */
 
     public int getDisplayValue(){
         Cursor cursor = myDB.getDisplay();
@@ -229,5 +240,4 @@ public class VehicleService extends Service {
         return displayVal;
     }
 
-       
 }

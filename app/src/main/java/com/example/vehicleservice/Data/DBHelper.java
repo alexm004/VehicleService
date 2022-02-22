@@ -1,4 +1,4 @@
-package com.example.vehicleservice;
+package com.example.vehicleservice.Data;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -29,7 +29,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String TABLE_NAME2 = "Control";
     private static String CREATE_TABLE2 = "CREATE TABLE IF NOT EXISTS "+ TABLE_NAME2 + "(id text PRIMARY KEY , unit text  , target text)";
 
-     DBHelper(Context context) {
+     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -92,7 +92,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return NoOfRows == 0;
     }
 
-    Cursor getDisplay(){
+    public Cursor getDisplay(){
         String id ="display";
         SQLiteDatabase myDB = this.getReadableDatabase();
         Cursor cursor = null;
@@ -125,7 +125,7 @@ public class DBHelper extends SQLiteOpenHelper {
         myDB.update(TABLE_NAME2,cv,"id=?",new String[]{id});
     }
 
-    Cursor getControlValue(){
+    public Cursor getControlValue(){
         String id ="control";
         SQLiteDatabase myDB = this.getReadableDatabase();
         Cursor cursor = null;
@@ -135,7 +135,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    Cursor getValue(String menu){
+    public Cursor getValue(String menu){
 
         SQLiteDatabase myDB = this.getReadableDatabase();
         Cursor cursor = null;
